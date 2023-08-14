@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  mn-groovy:
+    build: ./mn-groovy
+    ports:
+      - 8086:8086
+    links:
+      - redis
+      - mysql
+      - kafka
+  redis:
+    image: redislabs/redistimeseries
+    container_name: redis
+    privileged: true
+    restart: always
+    hostname: redis-int
+    ports:
+      - 6379:6379
+    command:
+      redis-server
+      --loadmodule /usr/lib/redis/modules/redistimeseries.so
+      --appendonly yes
+      --requirepass XXa751139cb25340764cb1c35a574443fb415972d7
+
+  mysql:
+    image: mysql:8
+    container_name: mysql8
+    hostname: mysql-int
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 0p9o8i7u
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql-data:/var/lib/mysql
+    cap_add:
+      - SYS_NICE
+volumes:
+  mysql-data:

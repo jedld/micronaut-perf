@@ -1,0 +1,40 @@
+micronaut:
+  application:
+    name: hello
+netty:
+  default:
+    allocator:
+      max-order: 3
+datasources:
+  default:
+    pooled: true
+    url: jdbc:mysql://mysql-int:3306/test?useUnicode=true&characterEncoding=UTF-8&useSSL=false&autoReconnect=true
+    driverClassName: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 0p9o8i7u
+    dbCreate: update
+    logSql: false
+    properties:
+      maxActive: 50
+      maxIdle: 50
+      minIdle: 5
+      initialSize: 5
+      minEvictableIdleTimeMillis: 60000
+      timeBetweenEvictionRunsMillis: 60000
+      maxWait: 100000
+      numTestsPerEvictionRun: 3
+      testOnBorrow: false /*for perf test*/
+      testOnReturn: false /*for perf test*/
+      testWhileIdle: true
+      validationQuery: /* ping */
+jpa:
+  default:
+    entity-scan:
+      packages:
+        - 'com.sample.domain'
+    properties:
+      hibernate:
+        show-sql: false
+        hbm2ddl:
+          auto: update
+    reactive: true

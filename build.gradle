@@ -1,0 +1,54 @@
+plugins {
+    id("groovy") 
+    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("io.micronaut.application") version "3.7.10"
+}
+
+version = "0.1"
+group = "com.sample"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation("io.micronaut:micronaut-http-client")
+    implementation("io.micronaut:micronaut-jackson-databind")
+    implementation("io.micronaut.groovy:micronaut-runtime-groovy")
+    implementation("jakarta.annotation:jakarta.annotation-api")
+    compileOnly("io.micronaut:micronaut-http-validation")
+    runtimeOnly("ch.qos.logback:logback-classic")
+
+    implementation("io.micronaut.data:micronaut-data-hibernate-reactive")
+    implementation("io.micronaut.sql:micronaut-hibernate-jpa")
+    compileOnly("io.micronaut.data:micronaut-data-hibernate-jpa")
+    annotationProcessor 'jakarta.persistence:jakarta.persistence-api:3.1.0'
+
+    implementation 'org.codehaus.groovy:groovy-sql:3.0.12'
+    implementation("io.micronaut.rxjava3:micronaut-rxjava3:2.3.0")
+    runtimeOnly("io.micronaut.sql:micronaut-jdbc-hikari")
+    runtimeOnly 'mysql:mysql-connector-java:8.0.30'
+    implementation("io.micronaut.sql:micronaut-vertx-mysql-client")
+}
+
+
+application {
+    mainClass.set("com.sample.Application")
+}
+java {
+    sourceCompatibility = JavaVersion.toVersion("11")
+    targetCompatibility = JavaVersion.toVersion("11")
+}
+
+graalvmNative.toolchainDetection = false
+micronaut {
+    runtime("netty")
+    testRuntime("spock2")
+    processing {
+        incremental(true)
+        annotations("com.sample.*")
+    }
+}
+
+
+
