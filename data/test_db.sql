@@ -29,6 +29,7 @@ CREATE TABLE `city` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL,
   `state_id` int NOT NULL,
+  `visits` int DEFAULT 0,
   `version` bigint NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

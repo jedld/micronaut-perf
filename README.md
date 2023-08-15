@@ -1,33 +1,35 @@
-## Micronaut 3.10.0 Documentation
+# Pyroscope Performance Testing
 
-- [User Guide](https://docs.micronaut.io/3.10.0/guide/index.html)
-- [API Reference](https://docs.micronaut.io/3.10.0/api/index.html)
-- [Configuration Reference](https://docs.micronaut.io/3.10.0/guide/configurationreference.html)
-- [Micronaut Guides](https://guides.micronaut.io/index.html)
----
+### Requirements
 
-- [Micronaut Gradle Plugin documentation](https://micronaut-projects.github.io/micronaut-gradle-plugin/latest/)
-- [Shadow Gradle Plugin](https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow)
-## Feature http-client documentation
+The following are needed in your system to run tests:
 
-- [Micronaut HTTP Client documentation](https://docs.micronaut.io/latest/guide/index.html#httpClient)
+- Docker
+- docker compose
 
-# How to run tests
+### Run using docker-compose
 
-We use k6 build with kafka support for http and kafka tests.
-### Build Custom K6
-#### Prerequisites:
-- go (>=1.7)
-- k6 (0.34.1)
-- git
+Navigate to project directory and run docker compose, make sure to change the
+pyroscope url and user credentials in the environment inside the docker-compose.yml.
 
-#### Install xk6 module:
-xk6 is a command line tool for building custom k6 with extensions such as for testing Kafka and MySQL.  
-`$ go install go.k6.io/xk6/cmd/xk6@latest`
+```
+cd micronaut-perf
+sudo docker-compose up
+```
 
-#### Make sure `$HOME/go/bin` is in the PATH variable.
-`export PATH="$PATH:$HOME/go/bin"`
+This will boot up a micronaut service in ports 8086 and 8087.
 
-#### Build custom k6 binary for Kafka and MySQL:
-`$ xk6 build v0.34.1 --output $HOME/go/bin/k6-custom --with github.com/mostafa/xk6-kafka@v0.6.0 --with github.com/imiric/xk6-sql`
+### Run the tests
+
+Test performance with Pyroscope Enabled
+
+```
+docker run --network=host --rm -i grafana/k6 run --vus 100 --iterations=10000  -e url=http://localhost:8086/test/city <test_scripts/testurl.js
+```
+
+Test performance with Pyroscope Disabled
+
+```
+docker run --network=host --rm -i grafana/k6 run --vus 100 --iterations=10000  -e url=http://localhost:8087/test/city <test_scripts/testurl.js
+```
 

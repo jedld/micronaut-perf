@@ -1,28 +1,28 @@
 version: '3'
-
 services:
-  mn-groovy:
-    build: ./mn-groovy
+  mn-groovy-on:
+    build: .
+    environment:
+      PYROSCOPE_ENABLED: "true"
+      PYROSCOPE_URL: "<URL here>"
+      PYROSCOPE_USER: "<USER here>"
+      PYROSCOPE_PASSWORD: "<PASSWORD here>"
     ports:
-      - 8086:8086
-    links:
-      - redis
+      - 8086:8080
+    depends_on:
       - mysql
-      - kafka
-  redis:
-    image: redislabs/redistimeseries
-    container_name: redis
-    privileged: true
-    restart: always
-    hostname: redis-int
+    links:
+      - mysql
+  mn-groovy-off:
+    build: .
+    environment:
+      PYROSCOPE_ENABLED: "false"
     ports:
-      - 6379:6379
-    command:
-      redis-server
-      --loadmodule /usr/lib/redis/modules/redistimeseries.so
-      --appendonly yes
-      --requirepass XXa751139cb25340764cb1c35a574443fb415972d7
-
+      - 8087:8080
+    depends_on:
+      - mysql
+    links:
+      - mysql
   mysql:
     image: mysql:8
     container_name: mysql8
@@ -30,12 +30,14 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: 0p9o8i7u
+      MYSQL_DATABASE: test
     command: --default-authentication-plugin=mysql_native_password
     ports:
-      - 3306:3306
+      - "3306:3306"
     volumes:
-      - mysql-data:/var/lib/mysql
+      - mysql-data-3:/var/lib/mysql
+      - ./data/test_db.sql:/docker-entrypoint-initdb.d/test_db.sql
     cap_add:
       - SYS_NICE
 volumes:
-  mysql-data:
+  mysql-data-3:

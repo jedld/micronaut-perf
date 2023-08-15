@@ -15,10 +15,13 @@ dependencies {
     implementation("io.micronaut:micronaut-http-client")
     implementation("io.micronaut:micronaut-jackson-databind")
     implementation("io.micronaut.groovy:micronaut-runtime-groovy")
+    compileOnly("io.micronaut.serde:micronaut-serde-processor")
     implementation("jakarta.annotation:jakarta.annotation-api")
     compileOnly("io.micronaut:micronaut-http-validation")
     runtimeOnly("ch.qos.logback:logback-classic")
 
+    implementation("io.micronaut.serde:micronaut-serde-jackson")
+    implementation("io.micronaut.serde:micronaut-serde-support")
     implementation("io.micronaut.data:micronaut-data-hibernate-reactive")
     implementation("io.micronaut.sql:micronaut-hibernate-jpa")
     compileOnly("io.micronaut.data:micronaut-data-hibernate-jpa")
@@ -29,6 +32,9 @@ dependencies {
     runtimeOnly("io.micronaut.sql:micronaut-jdbc-hikari")
     runtimeOnly 'mysql:mysql-connector-java:8.0.30'
     implementation("io.micronaut.sql:micronaut-vertx-mysql-client")
+
+    //profiling
+    implementation("io.pyroscope:agent:0.11.5")
 }
 
 
